@@ -1,22 +1,25 @@
 const express = require("express");
 const app = express();
+const handlebars = require("express-handlebars");
 
-app.get("/", function(req, res) {
-    res.sendFile(__dirname + "/html/index.html");
+//Config
+//template engine
+app.engine("handlebars", handlebars.engine({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
+
+//Conexão com o banco de daos
+const Sequelize = require("sequelize");
+const sequelize = new Sequelize("test", "root", "servidor123.", {
+  host: "localhost",
+  dialect: "mysql",
 });
 
-app.get("/sobre", function(req, res) {
-    res.sendFile(__dirname + "/html/sobre.html");
+//Rotas
+ app.get('/cad', function(req, res) {
+    res.render('formulario')
+ });
+
+app.listen(8081, function () {
+  console.log("Sevidor rodando na url http://localhost:8081");
 });
 
-app.get("/blog", function(req, res) {
-    res.sendFile(__dirname + "/html/blog.html");
-});
-
-app.get("/ola/:cargo/:nome", function(req, res) {
-    res.send("<h1>Ola " + req.params.nome + "</h1>" + "<h2>Seu cargo e  " + req.params.cargo + "</h2>");
-});
-
-app.listen(8081, function() {
-    console.log("Sevidor rodando na url http://localhost:8081");
-});
